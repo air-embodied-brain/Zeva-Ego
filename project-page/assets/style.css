@@ -866,10 +866,6 @@ a.resource-link:focus-visible {
   background: #fff;
 }
 
-.result-card-spaced {
-  margin-bottom: 1.35rem;
-}
-
 .results-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
