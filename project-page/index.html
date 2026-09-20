@@ -13,8 +13,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="assets/style.css">
 </head>
-<body>
-  <main class="hero hero-head is-fullheight" aria-labelledby="paper-title">
+<body id="top">
+  <header class="hero hero-head is-fullheight" aria-labelledby="paper-title">
     <canvas class="causal-field" aria-hidden="true"></canvas>
     <div class="aurora aurora-one" aria-hidden="true"></div>
     <div class="aurora aurora-two" aria-hidden="true"></div>
@@ -38,25 +38,310 @@
           </h1>
 
           <div class="authors" aria-label="Authors">
-            <span class="author-name">Bingjia Huang</span><sup>*</sup><span>,</span>
-            <span class="author-name">Xin Ding</span><sup>*</sup><span>,</span>
-            <span class="author-name">Fu Chen</span><sup>*</sup><span>,</span>
+            <span class="author-name">Bingjia Huang</span><sup>∗</sup><span>,</span>
+            <span class="author-name">Xin Ding</span><sup>∗,†</sup><span>,</span>
+            <span class="author-name">Fu Chen</span><sup>∗</sup><span>,</span>
             <span class="author-name">Kun Li</span><span>,</span>
             <span class="author-name">Wei Sun</span><span>,</span>
-            <span class="author-name">Hao Wu</span><span>,</span>
+            <span class="author-name">Hao Wu</span><sup>‡</sup><span>,</span>
             <span class="author-name">Yunxin Liu</span><span>,</span>
-            <span class="author-name">Ting Cao</span>
+            <span class="author-name">Ting Cao</span><sup>†</sup>
           </div>
 
           <div class="affiliations" aria-label="Affiliations">
             <span>Institute for AI Industry Research (AIR), Tsinghua University; Z-Trans AI</span>
           </div>
-          <div class="contribution-note"><sup>*</sup> Equal contribution</div>
+          <div class="contribution-note"><span><sup>∗</sup> Equal contribution</span><span><sup>†</sup> Corresponding author</span><span><sup>‡</sup> Work done during a visit to AIR, Tsinghua</span></div>
+          <div class="project-lead">Project lead: <strong>Ting Cao</strong> (<a href="mailto:tingcao@mail.tsinghua.edu.cn">tingcao@mail.tsinghua.edu.cn</a>)</div>
+
+          <div class="resource-links" aria-label="Project resources">
+            <span class="resource-link is-pending" aria-disabled="true"><span class="resource-icon">P</span>Paper</span>
+            <a class="resource-link" href="https://github.com/air-embodied-brain/Zeva" target="_blank" rel="noopener"><span class="resource-icon">&lt;/&gt;</span>Code</a>
+            <a class="resource-link" href="#bibtex"><span class="resource-icon">“</span>BibTeX</a>
+          </div>
         </div>
       </div>
     </div>
+  </header>
+
+  <nav class="section-nav" aria-label="Project sections">
+    <div class="section-nav-inner">
+      <a class="section-nav-brand" href="#top" aria-label="Back to top">Zeva-Ego</a>
+      <div class="section-nav-links">
+        <a href="#overview">Overview</a>
+        <a href="#abstract">Abstract</a>
+        <a href="#videos">Videos</a>
+        <a href="#method">Method</a>
+        <a href="#ace">ACE</a>
+        <a href="#results">Results</a>
+        <a href="#bibtex">BibTeX</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="content" class="page-content">
+    <section id="overview" class="project-section project-section-intro">
+      <div class="section-container">
+        <div class="section-heading reveal">
+          <span class="section-kicker">Project overview</span>
+          <h2>Egocentric experience for robot manipulation</h2>
+          <p class="section-lead">Zeva-Ego transfers scalable physical experience from egocentric video to robot policies, then improves through causal feedback collected during deployment.</p>
+        </div>
+
+        <figure class="media-frame media-frame-hero reveal">
+          <a class="teaser-link" href="assets/figures/zeva-ego-teaser.pdf" target="_blank" rel="noopener" title="Open the full-resolution PDF">
+            <img class="teaser-image" src="assets/figures/zeva-ego-teaser.png" alt="Zeva-Ego overview showing egocentric mid-training, the ego-enhanced ICCL VLA policy, and ICCL post-training." width="2555" height="1290">
+          </a>
+        </figure>
+
+        <div class="metric-grid headline-stats reveal" aria-label="Headline results">
+          <div class="metric-card"><strong>10K+ h</strong><span>Egocentric video for mid-training</span></div>
+          <div class="metric-card"><strong>+11.5 pts</strong><span>RoboTwin gain from Ego mid-training</span></div>
+          <div class="metric-card"><strong>4.5 h : 1 h</strong><span>Empirical Ego-to-Robot data equivalence</span></div>
+          <div class="metric-card"><strong>+31 pts</strong><span>RoboTwin gain across ICCL-enabled attempts</span></div>
+        </div>
+
+        <div id="abstract" class="abstract-panel reveal">
+          <div>
+            <h2>Abstract</h2>
+          </div>
+          <div class="abstract-copy">
+            <p>Egocentric video offers a scalable source of physical interaction experience, yet translating it into robot-executable knowledge and enabling continual adaptation remain challenging. We introduce Zeva-Ego, a unified framework that learns physical priors from human experience and evolves through robot interaction. An Action-Centric Encoder (ACE) converts egocentric visual transitions into action-centered supervision for VLA mid-training, while In-Context Causal Learning (ICCL) enables parameter-free adaptation from action-effect feedback at deployment. Scaling Ego data to 10K hours improves RoboTwin success from 63.8% to 75.3%, matching 2K hours of robot demonstrations (74.7%), corresponding to an empirical data ratio of roughly 4–5 : 1. With accumulated interaction experience, ICCL further improves success from 58% to 89% within four attempts without parameter updates. These results demonstrate a scalable path toward embodied intelligence that learns from human experience and continuously improves through its own interaction.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="videos" class="project-section section-tinted compact-section">
+      <div class="section-container">
+        <div class="section-heading section-heading-lined reveal">
+          <h2>Robot–Ego Task Correspondence</h2>
+          <p class="section-lead">Select a task to compare one continuous robot rollout with four synchronized egocentric demonstrations.</p>
+        </div>
+
+        <div class="demo-comparison reveal" data-demo-showcase>
+          <section class="demo-panel robot-demo-panel">
+            <div class="demo-panel-head">
+              <div>
+                <span class="demo-eyebrow">Robot Execution</span>
+                <h3 id="robot-task-title">Pick Tube</h3>
+              </div>
+              <div class="task-picker" data-task-picker>
+                <span class="task-picker-label">Task</span>
+                <button class="task-picker-button" type="button" aria-haspopup="listbox" aria-expanded="false">
+                  <span class="task-picker-value">Pick Tube</span>
+                  <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+                </button>
+                <div class="task-picker-menu" role="listbox" aria-label="Select a robot and ego demonstration task">
+                  <button type="button" role="option" data-task-value="picktube" aria-selected="true"><span>01</span><strong>Pick Tube</strong><i>✓</i></button>
+                  <button type="button" role="option" data-task-value="placebottle" aria-selected="false"><span>02</span><strong>Place Bottle</strong><i>✓</i></button>
+                  <button type="button" role="option" data-task-value="pourliquid" aria-selected="false"><span>03</span><strong>Pour Liquid</strong><i>✓</i></button>
+                </div>
+              </div>
+            </div>
+            <div class="demo-video-frame demo-video-frame-robot">
+              <video id="robot-demo-video" muted playsinline autoplay loop preload="metadata" aria-label="Real-robot task execution"></video>
+              <span class="video-domain-badge">Robot</span>
+            </div>
+            <p class="demo-caption">The robot rollout loops continuously and independently of the Ego examples.</p>
+          </section>
+
+          <section class="demo-panel ego-demo-panel">
+            <div class="demo-panel-head">
+              <div>
+                <span class="demo-eyebrow">Human Experience</span>
+                <h3>Egocentric Demonstrations</h3>
+              </div>
+              <span class="sync-indicator"><i></i>Synchronized replay</span>
+            </div>
+            <div class="ego-demo-grid" id="ego-demo-grid">
+              <div class="demo-video-frame"><video muted playsinline preload="metadata" aria-label="Egocentric demonstration one"></video><span class="video-domain-badge">Ego 01</span></div>
+              <div class="demo-video-frame"><video muted playsinline preload="metadata" aria-label="Egocentric demonstration two"></video><span class="video-domain-badge">Ego 02</span></div>
+              <div class="demo-video-frame"><video muted playsinline preload="metadata" aria-label="Egocentric demonstration three"></video><span class="video-domain-badge">Ego 03</span></div>
+              <div class="demo-video-frame"><video muted playsinline preload="metadata" aria-label="Egocentric demonstration four"></video><span class="video-domain-badge">Ego 04</span></div>
+            </div>
+            <p class="demo-caption">Each clip holds on its final frame; all four restart together after the longest clip finishes.</p>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section id="method" class="project-section compact-section">
+      <div class="section-container">
+        <div class="section-heading section-heading-lined reveal">
+          <h2>Method</h2>
+          <p class="section-lead">Zeva-Ego combines scalable offline human experience with online causal adaptation.</p>
+        </div>
+
+        <div class="feature-grid method-grid">
+          <article class="feature-card reveal">
+            <span class="feature-index">01 · ACTION REPRESENTATION</span>
+            <h3>Action-Centric Encoding</h3>
+            <p>ACE converts visual transitions into continuous action tokens while separating task-relevant motion from environment variation and preserving physical-action geometry across domains.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-index">02 · OFFLINE EXPERIENCE</span>
+            <h3>Egocentric Mid-Training</h3>
+            <p>Labeled and unlabeled egocentric video provide camera-frame action and language supervision, transferring scalable human interaction experience into the VLA policy.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-index">03 · ONLINE EVOLUTION</span>
+            <h3>ICCL Post-Training</h3>
+            <p>Action-effect feedback is accumulated as causal context and injected into the Action Expert, enabling improvement across attempts without parameter updates.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="ace" class="project-section section-tinted compact-section">
+      <div class="section-container">
+        <div class="section-heading section-heading-lined reveal">
+          <h2>Action-Centric Representation Geometry</h2>
+          <p class="section-lead">ACE preserves physical-action similarity across human and robot embodiments and transfers to unseen egocentric visual domains.</p>
+        </div>
+
+        <figure class="media-frame media-frame-wide reveal">
+          <a class="teaser-link" href="assets/figures/ace-action-token-geometry-v1.pdf" target="_blank" rel="noopener" title="Open the full-resolution PDF">
+            <img class="teaser-image" src="assets/figures/ace-action-token-geometry-v1.png" alt="Action-geometry validation across EgoDex and AgiBot, and zero-shot transfer from EgoDex to EgoVerse." width="2295" height="958" loading="lazy">
+          </a>
+          <figcaption>Task-token distance follows physical-action distance across EgoDex–AgiBot transitions and under zero-shot transfer to EgoVerse.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="results" class="project-section compact-section results-section">
+      <div class="section-container">
+        <div class="section-heading section-heading-lined reveal">
+          <h2>Results</h2>
+          <p class="section-lead">Scaling egocentric experience improves the offline physical prior, complements embodiment-specific robot data, and strengthens adaptation across repeated attempts.</p>
+        </div>
+
+        <div class="real-rollouts reveal" aria-label="Successful real-robot evaluation rollouts">
+          <div class="real-rollouts-heading">
+            <div>
+              <span class="result-label">REAL-ROBOT EVALUATION</span>
+              <h3>Successful task execution</h3>
+            </div>
+            <span class="rollout-status"><i></i>Successful rollouts</span>
+          </div>
+          <div class="real-rollouts-grid">
+            <article class="rollout-card">
+              <div class="rollout-video-frame">
+                <video muted playsinline autoplay loop preload="metadata" poster="assets/videos/real-results/pick-up-test-tube-poster.jpg" aria-label="Successful Pick Up Test Tube robot rollout">
+                  <source src="assets/videos/real-results/pick-up-test-tube-success.mp4" type="video/mp4">
+                </video>
+                <span class="video-domain-badge">Real Robot</span>
+              </div>
+              <div class="rollout-card-caption"><strong>Pick Up Test Tube</strong><span>Successful execution</span></div>
+            </article>
+            <article class="rollout-card">
+              <div class="rollout-video-frame">
+                <video muted playsinline autoplay loop preload="metadata" poster="assets/videos/real-results/pour-water-poster.jpg" aria-label="Successful Pour Water robot rollout">
+                  <source src="assets/videos/real-results/pour-water-success.mp4?v=success-only-3" type="video/mp4">
+                </video>
+                <span class="video-domain-badge">Real Robot</span>
+              </div>
+              <div class="rollout-card-caption"><strong>Pour Water</strong><span>Successful execution</span></div>
+            </article>
+          </div>
+        </div>
+
+        <article class="result-card result-card-table reveal">
+          <div class="result-card-copy">
+            <span class="result-label">OVERALL PERFORMANCE</span>
+            <h3>RoboTwin 2.0 under the Hard setting</h3>
+          </div>
+          <figure class="result-figure">
+            <a href="assets/figures/results/table1-robotwin-hard.png" target="_blank" rel="noopener" title="Open Table 1 at full resolution">
+              <img src="assets/figures/results/table1-robotwin-hard.png" alt="Performance comparison on ten RoboTwin 2.0 Hard tasks, where Zeva-Ego achieves the highest average success rate." width="1546" height="508" loading="lazy">
+            </a>
+          </figure>
+        </article>
+
+        <article class="result-card result-card-featured result-card-spaced reveal">
+          <div class="result-card-copy">
+            <span class="result-label">CROSS-DOMAIN ROBUSTNESS</span>
+            <h3>Strong generalization on LIBERO-PRO</h3>
+          </div>
+          <figure class="result-figure">
+            <a href="assets/figures/results/table2-libero-pro.png?v=2" target="_blank" rel="noopener" title="Open the LIBERO-PRO results at full resolution">
+              <img src="assets/figures/results/table2-libero-pro.png?v=2" alt="LIBERO-PRO suite-level success rates, where Zeva-Ego achieves the highest unweighted average across four suites." width="1974" height="728" loading="lazy">
+            </a>
+          </figure>
+        </article>
+
+        <article class="result-card result-card-featured reveal">
+          <div class="result-card-copy">
+            <span class="result-label">DATA SCALING</span>
+            <h3>Scalable physical priors from egocentric video</h3>
+            <p>10K hours of Ego video raises RoboTwin success from 63.8% to 75.3%, revealing an empirical data ratio of approximately 4–5 hours of Ego video per hour of Robot demonstrations.</p>
+          </div>
+          <figure class="result-figure">
+            <a href="assets/figures/results/fig6-midtraining-scaling.pdf" target="_blank" rel="noopener" title="Open Figure 6 as a vector PDF">
+              <img src="assets/figures/results/fig6-midtraining-scaling.png" alt="RoboTwin success rate as egocentric video and robot demonstration hours increase." width="1433" height="562" loading="lazy">
+            </a>
+          </figure>
+        </article>
+
+        <div class="results-grid">
+          <article class="result-card reveal">
+            <div class="result-card-copy">
+              <span class="result-label">DATA EFFICIENCY</span>
+              <h3>Ego experience complements robot demonstrations</h3>
+              <p>When Robot demonstrations are expensive to collect, a small amount of Robot data can be combined with abundant Ego experience to achieve strong downstream performance.</p>
+            </div>
+            <figure class="result-figure">
+              <a href="assets/figures/results/fig8-real-robot-data-efficiency.pdf" target="_blank" rel="noopener" title="Open Figure 8 as a vector PDF">
+                <img src="assets/figures/results/fig8-real-robot-data-efficiency.png" alt="Real-robot success with and without task-matched egocentric demonstrations across robot-data budgets." width="1461" height="528" loading="lazy">
+              </a>
+            </figure>
+          </article>
+
+          <article class="result-card reveal">
+            <div class="result-card-copy">
+              <span class="result-label">ONLINE EVOLUTION</span>
+              <h3>ICCL improves performance across attempts</h3>
+              <p>Ego-derived causal representations support more consistent cross-attempt improvement without updating policy parameters.</p>
+            </div>
+            <figure class="result-figure">
+              <a href="assets/figures/results/fig12-real-robot-iccl-attempts.png" target="_blank" rel="noopener" title="Open Figure 12 at full resolution">
+                <img src="assets/figures/results/fig12-real-robot-iccl-attempts.png" alt="Success rates across four repeated real-robot attempts for self-evolution with and without Ego-derived representations." width="2170" height="725" loading="lazy">
+              </a>
+            </figure>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="bibtex" class="project-section bibtex-section">
+      <div class="section-container bibtex-layout">
+        <div class="section-heading reveal">
+          <span class="section-kicker">Citation</span>
+          <h2>BibTeX</h2>
+          <p class="section-lead">If you find Zeva-Ego useful, please cite our work.</p>
+        </div>
+        <div class="bibtex-card reveal">
+          <button class="copy-button" type="button" data-copy-target="citation-code">Copy</button>
+          <pre id="citation-code"><code>@misc{huang2026zevaego,
+  title  = {{Zeva-Ego}: Egocentric Mid-Training with
+            In-Context Causal Learning for Robot Manipulation},
+  author = {Huang, Bingjia and Ding, Xin and Chen, Fu and
+            Li, Kun and Sun, Wei and Wu, Hao and
+            Liu, Yunxin and Cao, Ting},
+  year   = {2026},
+  url    = {https://air-embodied-brain.github.io/Zeva-Ego/}
+}</code></pre>
+        </div>
+      </div>
+    </section>
   </main>
 
+  <footer class="site-footer">
+    <p><strong>Zeva-Ego</strong> · AIR, Tsinghua University × Z-Trans AI</p>
+    <a href="#top">Back to top ↑</a>
+  </footer>
+
   <script src="assets/hero.js"></script>
+  <script src="assets/site.js"></script>
 </body>
 </html>
