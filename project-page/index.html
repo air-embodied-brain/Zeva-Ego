@@ -19,7 +19,10 @@
     <div class="aurora aurora-one" aria-hidden="true"></div>
     <div class="aurora aurora-two" aria-hidden="true"></div>
     <div class="aurora aurora-three" aria-hidden="true"></div>
-    <div class="perspective-grid" aria-hidden="true"></div>
+    <div class="perspective-grid" aria-hidden="true">
+      <div class="grid-rows"></div>
+      <div class="grid-cols"></div>
+    </div>
     <div class="vignette" aria-hidden="true"></div>
 
     <div class="hero-body">
@@ -225,32 +228,64 @@
           <p class="section-lead">Scaling egocentric experience improves the offline physical prior, complements embodiment-specific robot data, and strengthens adaptation across repeated attempts.</p>
         </div>
 
-        <div class="real-rollouts reveal" aria-label="Successful real-robot evaluation rollouts">
+        <div class="real-rollouts reveal" aria-label="Long-horizon laboratory procedures">
           <div class="real-rollouts-heading">
             <div>
-              <span class="result-label">REAL-ROBOT EVALUATION</span>
-              <h3>Successful task execution</h3>
+              <span class="result-label">LONG-HORIZON TASKS</span>
+              <h3>Multi-stage laboratory procedures</h3>
             </div>
-            <span class="rollout-status"><i></i>Successful rollouts</span>
+            <span class="rollout-status is-longhorizon"><i></i>2&times; speed</span>
           </div>
           <div class="real-rollouts-grid">
             <article class="rollout-card">
               <div class="rollout-video-frame">
-                <video muted playsinline autoplay loop preload="metadata" poster="assets/videos/real-results/pick-up-test-tube-poster.jpg" aria-label="Successful Pick Up Test Tube robot rollout">
-                  <source src="assets/videos/real-results/pick-up-test-tube-success.mp4" type="video/mp4">
+                <video muted playsinline loop preload="metadata" data-viewport-loop poster="assets/videos/real-results/pour-into-beaker-poster.jpg" aria-label="Long-horizon pour into beaker rollout">
+                  <source src="assets/videos/real-results/pour-into-beaker.mp4" type="video/mp4">
                 </video>
                 <span class="video-domain-badge">Real Robot</span>
+                <span class="video-speed-badge">2&times;</span>
               </div>
-              <div class="rollout-card-caption"><strong>Pick Up Test Tube</strong><span>Successful execution</span></div>
+              <div class="rollout-card-caption"><strong>Add Mixture to Beaker</strong><span>Multi-stage procedure</span></div>
             </article>
             <article class="rollout-card">
               <div class="rollout-video-frame">
-                <video muted playsinline autoplay loop preload="metadata" poster="assets/videos/real-results/pour-water-poster.jpg" aria-label="Successful Pour Water robot rollout">
-                  <source src="assets/videos/real-results/pour-water-success.mp4?v=success-only-3" type="video/mp4">
+                <video muted playsinline loop preload="metadata" data-viewport-loop poster="assets/videos/real-results/ph-measurement-poster.jpg" aria-label="Long-horizon pH measurement rollout">
+                  <source src="assets/videos/real-results/ph-measurement.mp4" type="video/mp4">
+                </video>
+                <span class="video-domain-badge">Real Robot</span>
+                <span class="video-speed-badge">2&times;</span>
+              </div>
+              <div class="rollout-card-caption"><strong>pH Measurement</strong><span>Multi-stage procedure</span></div>
+            </article>
+          </div>
+        </div>
+
+        <div class="real-rollouts reveal" aria-label="Online evolution across repeated attempts">
+          <div class="real-rollouts-heading">
+            <div>
+              <span class="result-label">ONLINE EVOLUTION</span>
+              <h3>Improvement across attempts</h3>
+            </div>
+            <span class="rollout-status is-evolve"><i></i>Fail &rarr; success</span>
+          </div>
+          <div class="real-rollouts-grid">
+            <article class="rollout-card">
+              <div class="rollout-video-frame">
+                <video muted playsinline preload="metadata" data-viewport-hold poster="assets/videos/real-results/grasp-test-tube-evolve-poster.jpg" aria-label="Grasp Test Tube rollout evolving from failed to successful attempts">
+                  <source src="assets/videos/real-results/grasp-test-tube-evolve.mp4" type="video/mp4">
                 </video>
                 <span class="video-domain-badge">Real Robot</span>
               </div>
-              <div class="rollout-card-caption"><strong>Pour Water</strong><span>Successful execution</span></div>
+              <div class="rollout-card-caption"><strong>Grasp Test Tube</strong><span>Failed attempts, then success</span></div>
+            </article>
+            <article class="rollout-card">
+              <div class="rollout-video-frame">
+                <video muted playsinline preload="metadata" data-viewport-hold poster="assets/videos/real-results/pour-water-evolve-poster.jpg" aria-label="Pour Water rollout evolving from failed to successful attempts">
+                  <source src="assets/videos/real-results/pour-water-evolve.mp4" type="video/mp4">
+                </video>
+                <span class="video-domain-badge">Real Robot</span>
+              </div>
+              <div class="rollout-card-caption"><strong>Pour Water</strong><span>Failed attempts, then success</span></div>
             </article>
           </div>
         </div>

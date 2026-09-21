@@ -233,7 +233,60 @@
     }
   });
 
-  loadTask(currentTask);
+  if ("IntersectionObserver" in window) {
+    const showcaseObserver = new IntersectionObserver((entries, observer) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      observer.disconnect();
+      loadTask(currentTask);
+    }, { rootMargin: "300px 0px" });
+    showcaseObserver.observe(showcase);
+  } else {
+    loadTask(currentTask);
+  }
+})();
+
+(() => {
+  const videos = Array.from(document.querySelectorAll("video[data-viewport-loop], video[data-viewport-hold]"));
+  if (!videos.length) return;
+
+  const HOLD_DELAY = 900;
+  const timers = new WeakMap();
+
+  const clearHold = (video) => {
+    window.clearTimeout(timers.get(video));
+    timers.delete(video);
+  };
+
+  videos.forEach((video) => {
+    if (!video.hasAttribute("data-viewport-hold")) return;
+    video.addEventListener("ended", () => {
+      clearHold(video);
+      timers.set(video, window.setTimeout(() => {
+        video.currentTime = 0;
+        video.play().catch(() => {});
+      }, HOLD_DELAY));
+    });
+  });
+
+  if (!("IntersectionObserver" in window)) {
+    videos.forEach((video) => video.play().catch(() => {}));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const video = entry.target;
+      if (entry.isIntersecting) {
+        if (video.ended) video.currentTime = 0;
+        video.play().catch(() => {});
+      } else if (!video.paused) {
+        clearHold(video);
+        video.pause();
+      }
+    });
+  }, { rootMargin: "200px 0px" });
+
+  videos.forEach((video) => observer.observe(video));
 })();
 
 (() => {

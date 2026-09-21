@@ -87,12 +87,20 @@ body {
 .aurora-one {
   top: -24%;
   left: -10%;
+  width: 45vw;
+  height: 45vw;
+  min-width: 450px;
+  min-height: 450px;
   background: #53d7c9;
   animation: aurora-one 17s ease-in-out infinite alternate;
 }
 
 .aurora-two {
   inset: auto -15% -30% auto;
+  width: 45vw;
+  height: 45vw;
+  min-width: 450px;
+  min-height: 450px;
   background: #a888ed;
   animation: aurora-two 19s ease-in-out infinite alternate;
 }
@@ -115,15 +123,37 @@ body {
   left: -15%;
   width: 130%;
   height: 66%;
+  overflow: hidden;
   opacity: 0.24;
-  background-image:
-    linear-gradient(rgba(37, 99, 235, 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(37, 99, 235, 0.12) 1px, transparent 1px);
-  background-size: 72px 46px;
   transform: perspective(560px) rotateX(66deg) translateY(-5%);
   transform-origin: center top;
   mask-image: linear-gradient(to bottom, transparent, #000 24%, transparent 88%);
-  animation: grid-drift 11s linear infinite;
+}
+
+.grid-rows,
+.grid-cols {
+  position: absolute;
+  background-size: 72px 46px;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.grid-rows {
+  top: -46px;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 46px);
+  background-image: linear-gradient(rgba(37, 99, 235, 0.12) 1px, transparent 1px);
+  animation: grid-drift-rows 11s linear infinite;
+}
+
+.grid-cols {
+  top: 0;
+  left: -72px;
+  width: calc(100% + 72px);
+  height: 100%;
+  background-image: linear-gradient(90deg, rgba(37, 99, 235, 0.12) 1px, transparent 1px);
+  animation: grid-drift-cols 11s linear infinite;
 }
 
 .vignette {
@@ -786,6 +816,30 @@ a.resource-link:focus-visible {
   border-radius: 50%;
   background: #13a287;
   box-shadow: 0 0 0 4px rgba(19, 162, 135, 0.12);
+}
+
+.rollout-status.is-evolve i {
+  background: linear-gradient(135deg, #e0973f 0%, #13a287 100%);
+  box-shadow: 0 0 0 4px rgba(224, 151, 63, 0.14);
+}
+
+.rollout-status.is-longhorizon i {
+  background: #2368d8;
+  box-shadow: 0 0 0 4px rgba(35, 104, 216, 0.12);
+}
+
+.video-speed-badge {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  padding: 0.16rem 0.44rem;
+  border-radius: 6px;
+  background: rgba(16, 33, 58, 0.62);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  pointer-events: none;
 }
 
 .real-rollouts-grid {
@@ -1735,23 +1789,28 @@ a.resource-link:focus-visible {
 }
 
 @keyframes aurora-one {
-  from { transform: translate3d(-4%, -2%, 0) scale(0.9); }
-  to { transform: translate3d(30%, 18%, 0) scale(1.18); }
+  from { transform: translate3d(-4%, -2%, 0); opacity: 0.115; }
+  to { transform: translate3d(30%, 18%, 0); opacity: 0.145; }
 }
 
 @keyframes aurora-two {
-  from { transform: translate3d(0, 0, 0) scale(1); }
-  to { transform: translate3d(-28%, -18%, 0) scale(1.15); }
+  from { transform: translate3d(0, 0, 0); opacity: 0.12; }
+  to { transform: translate3d(-28%, -18%, 0); opacity: 0.142; }
 }
 
 @keyframes aurora-three {
-  from { transform: translate3d(-15%, 4%, 0) scale(0.85); }
-  to { transform: translate3d(15%, -12%, 0) scale(1.12); }
+  from { transform: translate3d(-15%, 4%, 0); opacity: 0.088; }
+  to { transform: translate3d(15%, -12%, 0); opacity: 0.112; }
 }
 
-@keyframes grid-drift {
-  from { background-position: 0 0, 0 0; }
-  to { background-position: 0 46px, 72px 0; }
+@keyframes grid-drift-rows {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, 46px, 0); }
+}
+
+@keyframes grid-drift-cols {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(72px, 0, 0); }
 }
 
 @media (max-width: 768px) {
