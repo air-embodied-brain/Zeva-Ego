@@ -404,7 +404,7 @@ a.resource-link:focus-visible {
   background: linear-gradient(100deg, var(--cyan), var(--sky), var(--violet));
   background-clip: text;
   -webkit-background-clip: text;
-  font-size: 1rem;
+  font-size: 1.08rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   text-decoration: none;
@@ -423,7 +423,7 @@ a.resource-link:focus-visible {
   align-items: center;
   height: 100%;
   color: #64738b;
-  font-size: 0.77rem;
+  font-size: 0.9rem;
   font-weight: 700;
   text-decoration: none;
   transition: color 150ms ease;
@@ -1830,7 +1830,7 @@ a.resource-link:focus-visible {
   .section-nav-inner { width: calc(100% - 1.5rem); }
   .section-nav-brand { display: none; }
   .section-nav-links { width: 100%; justify-content: space-between; gap: 0.35rem; overflow-x: auto; }
-  .section-nav-links a { flex: 0 0 auto; font-size: 0.68rem; }
+  .section-nav-links a { flex: 0 0 auto; font-size: 0.76rem; }
   .project-section { padding: 4.5rem 1rem; }
   .abstract-panel,
   .bibtex-layout { grid-template-columns: 1fr; gap: 1.7rem; }
