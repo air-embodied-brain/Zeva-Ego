@@ -70,8 +70,8 @@
       <div class="section-nav-links">
         <a href="#overview">Overview</a>
         <a href="#abstract">Abstract</a>
-        <a href="#videos">Videos</a>
         <a href="#method">Method</a>
+        <a href="#ego-data">Ego Data</a>
         <a href="#ace">ACE</a>
         <a href="#results">Results</a>
         <a href="#bibtex">BibTeX</a>
@@ -94,11 +94,11 @@
           </a>
         </figure>
 
-        <div class="metric-grid headline-stats reveal" aria-label="Headline results">
-          <div class="metric-card"><strong>10K+ h</strong><span>Egocentric video for mid-training</span></div>
-          <div class="metric-card"><strong>+11.5 pts</strong><span>RoboTwin gain from Ego mid-training</span></div>
-          <div class="metric-card"><strong>4.5 h : 1 h</strong><span>Empirical Ego-to-Robot data equivalence</span></div>
-          <div class="metric-card"><strong>+31 pts</strong><span>RoboTwin gain across ICCL-enabled attempts</span></div>
+        <div class="metric-grid headline-stats reveal" aria-label="Headline results" data-animated-metrics>
+          <div class="metric-card"><strong data-metric-value="10" data-metric-decimals="0" data-metric-suffix="K+ h">10K+ h</strong><span>Egocentric video for mid-training</span></div>
+          <div class="metric-card"><strong data-metric-value="11.5" data-metric-decimals="1" data-metric-prefix="+" data-metric-suffix=" pts">+11.5 pts</strong><span>RoboTwin gain from Ego mid-training</span></div>
+          <div class="metric-card"><strong data-metric-value="4.5" data-metric-decimals="1" data-metric-suffix=" h : 1 h">4.5 h : 1 h</strong><span>Empirical Ego-to-Robot data equivalence</span></div>
+          <div class="metric-card"><strong data-metric-value="31" data-metric-decimals="0" data-metric-prefix="+" data-metric-suffix=" pts">+31 pts</strong><span>RoboTwin gain across ICCL-enabled attempts</span></div>
         </div>
 
         <div id="abstract" class="abstract-panel reveal">
@@ -112,11 +112,47 @@
       </div>
     </section>
 
-    <section id="videos" class="project-section section-tinted compact-section">
+    <section id="method" class="project-section compact-section">
       <div class="section-container">
         <div class="section-heading section-heading-lined reveal">
-          <h2>Robot–Ego Task Correspondence</h2>
-          <p class="section-lead">Select a task to compare one continuous robot rollout with four synchronized egocentric demonstrations.</p>
+          <h2>Method</h2>
+          <p class="section-lead">Zeva-Ego combines scalable offline human experience with online causal adaptation.</p>
+        </div>
+
+        <div class="feature-grid method-grid">
+          <article class="feature-card reveal">
+            <span class="feature-index">01 · ACTION REPRESENTATION</span>
+            <h3>Action-Centric Encoding</h3>
+            <p>ACE converts visual transitions into continuous action tokens while separating task-relevant motion from environment variation and preserving physical-action geometry across domains.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-index">02 · OFFLINE EXPERIENCE</span>
+            <h3>Egocentric Mid-Training</h3>
+            <p>Labeled and unlabeled egocentric video provide camera-frame action and language supervision, transferring scalable human interaction experience into the VLA policy.</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-index">03 · ONLINE EVOLUTION</span>
+            <h3>ICCL Post-Training</h3>
+            <p>Action-effect feedback is accumulated as causal context and injected into the Action Expert, enabling improvement across attempts without parameter updates.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="ego-data" class="project-section section-tinted compact-section">
+      <div class="section-container">
+        <div class="section-heading section-heading-lined reveal">
+          <h2>Ego Data</h2>
+          <p class="section-lead">Our mid-training mixture spans diverse tasks, environments, supervision types, and more than 10K hours of egocentric experience.</p>
+        </div>
+
+        <figure class="media-frame ego-data-overview reveal">
+          <img src="assets/figures/ego-data-statistics-overview.png" alt="Four-panel overview of Ego data, including action vocabulary, available data scale, semantic coverage, and supervision modalities." width="2020" height="1090" loading="lazy">
+        </figure>
+
+        <div class="data-subsection-heading reveal">
+          <h3>Robot–Ego Task Correspondence</h3>
+          <p>Select a task to compare one continuous robot rollout with four synchronized egocentric demonstrations.</p>
         </div>
 
         <div class="demo-comparison reveal" data-demo-showcase>
@@ -162,33 +198,6 @@
             </div>
             <p class="demo-caption">Each clip holds on its final frame; all four restart together after the longest clip finishes.</p>
           </section>
-        </div>
-      </div>
-    </section>
-
-    <section id="method" class="project-section compact-section">
-      <div class="section-container">
-        <div class="section-heading section-heading-lined reveal">
-          <h2>Method</h2>
-          <p class="section-lead">Zeva-Ego combines scalable offline human experience with online causal adaptation.</p>
-        </div>
-
-        <div class="feature-grid method-grid">
-          <article class="feature-card reveal">
-            <span class="feature-index">01 · ACTION REPRESENTATION</span>
-            <h3>Action-Centric Encoding</h3>
-            <p>ACE converts visual transitions into continuous action tokens while separating task-relevant motion from environment variation and preserving physical-action geometry across domains.</p>
-          </article>
-          <article class="feature-card reveal">
-            <span class="feature-index">02 · OFFLINE EXPERIENCE</span>
-            <h3>Egocentric Mid-Training</h3>
-            <p>Labeled and unlabeled egocentric video provide camera-frame action and language supervision, transferring scalable human interaction experience into the VLA policy.</p>
-          </article>
-          <article class="feature-card reveal">
-            <span class="feature-index">03 · ONLINE EVOLUTION</span>
-            <h3>ICCL Post-Training</h3>
-            <p>Action-effect feedback is accumulated as causal context and injected into the Action Expert, enabling improvement across attempts without parameter updates.</p>
-          </article>
         </div>
       </div>
     </section>
@@ -306,7 +315,7 @@
         <div class="section-heading reveal">
           <span class="section-kicker">Citation</span>
           <h2>BibTeX</h2>
-          <p class="section-lead">If you find Zeva-Ego useful, please cite our work.</p>
+          <p class="section-lead">If you find Zeva-Ego useful,<br>please cite our work.</p>
         </div>
         <div class="bibtex-card reveal">
           <button class="copy-button" type="button" data-copy-target="citation-code">Copy</button>

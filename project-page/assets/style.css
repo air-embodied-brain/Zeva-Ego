@@ -476,11 +476,16 @@ a.resource-link:focus-visible {
   text-transform: uppercase;
 }
 
-.section-kicker::before {
+.section-kicker::before,
+.section-kicker::after {
   width: 24px;
   height: 1px;
   content: "";
   background: linear-gradient(90deg, var(--cyan), var(--sky));
+}
+
+.section-kicker::after {
+  transform: scaleX(-1);
 }
 
 .section-heading h2,
@@ -795,6 +800,7 @@ a.resource-link:focus-visible {
   border: 1px solid rgba(44, 97, 183, 0.12);
   border-radius: 16px;
   background: #f9fbfe;
+  box-shadow: 0 10px 28px rgba(34, 70, 128, 0.075);
 }
 
 .rollout-video-frame {
@@ -929,6 +935,7 @@ a.resource-link:focus-visible {
   overflow: hidden;
   border-radius: 12px;
   background: #fff;
+  box-shadow: 0 8px 24px rgba(34, 70, 128, 0.075);
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
@@ -954,6 +961,7 @@ a.resource-link:focus-visible {
   border: 1px solid rgba(35, 104, 216, 0.11);
   border-radius: 24px;
   background: linear-gradient(135deg, rgba(242, 250, 249, 0.78), rgba(248, 247, 255, 0.86));
+  box-shadow: 0 18px 54px rgba(34, 70, 128, 0.075);
 }
 
 .abstract-panel > div:first-child {
@@ -1098,6 +1106,58 @@ a.resource-link:focus-visible {
   font-size: clamp(1.18rem, 1.8vw, 1.5rem);
 }
 
+.ego-data-overview {
+  width: min(1120px, 100%);
+  margin: 2rem auto 0;
+  padding: 0.55rem;
+  overflow: hidden;
+  border: 1px solid rgba(44, 97, 183, 0.14);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 20px 54px rgba(34, 70, 128, 0.09);
+}
+
+.ego-data-overview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+}
+
+.data-subsection-heading {
+  width: min(820px, 100%);
+  margin: 3.25rem auto 1.45rem;
+  text-align: center;
+}
+
+.data-subsection-heading::before {
+  display: block;
+  width: 42px;
+  height: 2px;
+  margin: 0 auto 0.9rem;
+  content: "";
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--cyan), var(--sky), var(--violet));
+}
+
+.data-subsection-heading h3 {
+  margin: 0;
+  color: var(--navy);
+  font-family: "Newsreader", Georgia, serif;
+  font-size: clamp(1.7rem, 3vw, 2.35rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.data-subsection-heading p {
+  max-width: 690px;
+  margin: 0.8rem auto 0;
+  color: #66758c;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
 #abstract {
   scroll-margin-top: 92px;
 }
@@ -1125,6 +1185,34 @@ a.resource-link:focus-visible {
   font-weight: 750;
   letter-spacing: -0.025em;
   line-height: 1;
+}
+
+.metric-card strong[data-metric-value] {
+  min-width: 5.5ch;
+  font-variant-numeric: tabular-nums;
+  transform-origin: 50% 65%;
+}
+
+.metric-card strong[data-metric-value].is-counting {
+  animation: metric-number-arrive 560ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes metric-number-arrive {
+  0% {
+    opacity: 0.28;
+    filter: blur(3px);
+    transform: translateY(0.42em) scale(0.94);
+  }
+  58% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(-0.04em) scale(1.025);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scale(1);
+  }
 }
 
 .metric-card span {
@@ -1396,7 +1484,7 @@ a.resource-link:focus-visible {
   border: 1px solid rgba(35, 104, 216, 0.14);
   border-radius: 14px;
   background: #071126;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  box-shadow: 0 8px 22px rgba(24, 55, 108, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 .demo-video-frame video {

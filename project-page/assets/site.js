@@ -36,6 +36,61 @@
 })();
 
 (() => {
+  const metricGroup = document.querySelector("[data-animated-metrics]");
+  if (!metricGroup) return;
+
+  const metrics = Array.from(metricGroup.querySelectorAll("[data-metric-value]"));
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const formatMetric = (element, value) => {
+    const decimals = Number(element.dataset.metricDecimals || 0);
+    const prefix = element.dataset.metricPrefix || "";
+    const suffix = element.dataset.metricSuffix || "";
+    return `${prefix}${value.toFixed(decimals)}${suffix}`;
+  };
+
+  const animateMetric = (element, delay) => {
+    const target = Number(element.dataset.metricValue);
+    const duration = 1150;
+
+    window.setTimeout(() => {
+      element.classList.add("is-counting");
+      const startTime = performance.now();
+
+      const step = (now) => {
+        const progress = Math.min((now - startTime) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 4);
+        element.textContent = formatMetric(element, target * eased);
+
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          element.textContent = formatMetric(element, target);
+        }
+      };
+
+      requestAnimationFrame(step);
+    }, delay);
+  };
+
+  if (reducedMotion || !("IntersectionObserver" in window)) return;
+
+  metrics.forEach((metric) => {
+    metric.textContent = formatMetric(metric, 0);
+  });
+
+  const metricObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      metrics.forEach((metric, index) => animateMetric(metric, index * 120));
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.42 });
+
+  metricObserver.observe(metricGroup);
+})();
+
+(() => {
   const showcase = document.querySelector("[data-demo-showcase]");
   if (!showcase) return;
 
