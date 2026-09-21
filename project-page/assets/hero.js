@@ -7,6 +7,12 @@
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const pointer = { x: 0, y: 0, tx: 0, ty: 0, active: false };
 
+  const EDGE_RADIUS = 132;
+  const EDGE_ALPHA = 0.105 * 1.3;
+  const EDGE_BUCKETS = 8;
+  const HALO_RADIUS = 15;
+  const NODE_COLORS = ["15,159,145", "35,104,216", "118,80,206"];
+
   let width = 1;
   let height = 1;
   let dpr = 1;
@@ -15,6 +21,12 @@
   let frame = 0;
   let previous = 0;
   let running = true;
+
+  let grid = [];
+  let gridCols = 0;
+  let gridRows = 0;
+  const edgeBuckets = Array.from({ length: EDGE_BUCKETS }, () => []);
+  const haloSprites = new Map();
 
   const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
   const mix = (a, b, t) => a + (b - a) * t;
@@ -25,6 +37,30 @@
       x: u ** 3 * curve.x0 + 3 * u ** 2 * t * curve.x1 + 3 * u * t ** 2 * curve.x2 + t ** 3 * curve.x3,
       y: u ** 3 * curve.y0 + 3 * u ** 2 * t * curve.y1 + 3 * u * t ** 2 * curve.y2 + t ** 3 * curve.y3,
     };
+  };
+
+  const haloSprite = (color) => {
+    const cached = haloSprites.get(color);
+    if (cached) return cached;
+
+    const span = HALO_RADIUS * 2;
+    const sprite = document.createElement("canvas");
+    sprite.width = Math.ceil(span * dpr);
+    sprite.height = Math.ceil(span * dpr);
+
+    const sctx = sprite.getContext("2d");
+    sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const halo = sctx.createRadialGradient(HALO_RADIUS, HALO_RADIUS, 0, HALO_RADIUS, HALO_RADIUS, HALO_RADIUS);
+    halo.addColorStop(0, `rgba(${color},0.7)`);
+    halo.addColorStop(0.16, `rgba(${color},0.22)`);
+    halo.addColorStop(1, `rgba(${color},0)`);
+    sctx.fillStyle = halo;
+    sctx.beginPath();
+    sctx.arc(HALO_RADIUS, HALO_RADIUS, HALO_RADIUS, 0, Math.PI * 2);
+    sctx.fill();
+
+    haloSprites.set(color, sprite);
+    return sprite;
   };
 
   const resize = () => {
@@ -38,6 +74,8 @@
     canvas.style.height = `${height}px`;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
+    haloSprites.clear();
+
     pointer.x = pointer.tx = width / 2;
     pointer.y = pointer.ty = height / 2;
 
@@ -50,7 +88,15 @@
       radius: 0.65 + Math.random() * 1.25,
       phase: Math.random() * Math.PI * 2,
       family: index % 3,
+      px: 0,
+      py: 0,
+      influence: 0,
+      pulse: 0,
     }));
+
+    gridCols = Math.max(1, Math.ceil((width + 60) / EDGE_RADIUS));
+    gridRows = Math.max(1, Math.ceil((height + 60) / EDGE_RADIUS));
+    grid = Array.from({ length: gridCols * gridRows }, () => []);
 
     const streamCount = width < 720 ? 4 : 7;
     streams = Array.from({ length: streamCount }, (_, index) => {
@@ -76,6 +122,7 @@
     const sway = Math.sin(time * 0.00018 + stream.phase * 8) * height * 0.018;
     const curve = { ...stream, y1: stream.y1 + sway, y2: stream.y2 - sway };
     const color = stream.hue === 0 ? "15,159,145" : "118,80,206";
+    const sprite = haloSprite(color);
 
     ctx.beginPath();
     ctx.moveTo(curve.x0, curve.y0);
@@ -84,21 +131,59 @@
     ctx.lineWidth = 0.8;
     ctx.stroke();
 
+    ctx.fillStyle = `rgba(${color},0.95)`;
     for (let pulse = 0; pulse < 3; pulse += 1) {
       const t = ((time * stream.speed * 0.001 + stream.phase + pulse / 3) % 1 + 1) % 1;
       const point = cubicPoint(curve, t);
-      const halo = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, 15);
-      halo.addColorStop(0, `rgba(${color},0.7)`);
-      halo.addColorStop(0.16, `rgba(${color},0.22)`);
-      halo.addColorStop(1, `rgba(${color},0)`);
-      ctx.fillStyle = halo;
-      ctx.beginPath();
-      ctx.arc(point.x, point.y, 15, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = `rgba(${color},0.95)`;
+      ctx.drawImage(sprite, point.x - HALO_RADIUS, point.y - HALO_RADIUS, HALO_RADIUS * 2, HALO_RADIUS * 2);
       ctx.beginPath();
       ctx.arc(point.x, point.y, 1.45, 0, Math.PI * 2);
       ctx.fill();
+    }
+  };
+
+  const cellIndex = (node) => {
+    const col = clamp(Math.floor((node.x + 30) / EDGE_RADIUS), 0, gridCols - 1);
+    const row = clamp(Math.floor((node.y + 30) / EDGE_RADIUS), 0, gridRows - 1);
+    return row * gridCols + col;
+  };
+
+  const collectEdges = () => {
+    for (let i = 0; i < grid.length; i += 1) grid[i].length = 0;
+    for (let i = 0; i < EDGE_BUCKETS; i += 1) edgeBuckets[i].length = 0;
+
+    for (let i = 0; i < nodes.length; i += 1) grid[cellIndex(nodes[i])].push(i);
+
+    for (let row = 0; row < gridRows; row += 1) {
+      for (let col = 0; col < gridCols; col += 1) {
+        const cell = grid[row * gridCols + col];
+        if (!cell.length) continue;
+
+        for (let dRow = 0; dRow <= 1; dRow += 1) {
+          for (let dCol = dRow === 0 ? 0 : -1; dCol <= 1; dCol += 1) {
+            const nRow = row + dRow;
+            const nCol = col + dCol;
+            if (nRow >= gridRows || nCol < 0 || nCol >= gridCols) continue;
+            const other = grid[nRow * gridCols + nCol];
+            if (!other.length) continue;
+            const sameCell = dRow === 0 && dCol === 0;
+
+            for (let a = 0; a < cell.length; a += 1) {
+              const node = nodes[cell[a]];
+              for (let b = sameCell ? a + 1 : 0; b < other.length; b += 1) {
+                const peer = nodes[other[b]];
+                const dx = node.x - peer.x;
+                const dy = node.y - peer.y;
+                const edgeDistance = Math.hypot(dx, dy);
+                if (edgeDistance > EDGE_RADIUS) continue;
+                const strength = 1 - edgeDistance / EDGE_RADIUS;
+                const bucket = clamp(Math.floor(strength * EDGE_BUCKETS), 0, EDGE_BUCKETS - 1);
+                edgeBuckets[bucket].push(node.px, node.py, peer.x, peer.y);
+              }
+            }
+          }
+        }
+      }
     }
   };
 
@@ -123,38 +208,45 @@
       const dx = pointer.x - node.x;
       const dy = pointer.y - node.y;
       const distance = Math.hypot(dx, dy);
-      const influence = pointer.active ? clamp(1 - distance / 230, 0, 1) : 0;
-      const px = node.x - dx * influence * 0.035;
-      const py = node.y - dy * influence * 0.035;
-      const pulse = 0.72 + Math.sin(time * 0.0014 + node.phase) * 0.28;
-      const colors = ["15,159,145", "35,104,216", "118,80,206"];
-      const color = colors[node.family];
+      node.influence = pointer.active ? clamp(1 - distance / 230, 0, 1) : 0;
+      node.px = node.x - dx * node.influence * 0.035;
+      node.py = node.y - dy * node.influence * 0.035;
+      node.pulse = 0.72 + Math.sin(time * 0.0014 + node.phase) * 0.28;
+    }
 
-      for (let j = i + 1; j < nodes.length; j += 1) {
-        const other = nodes[j];
-        const edgeDistance = Math.hypot(node.x - other.x, node.y - other.y);
-        if (edgeDistance > 132) continue;
-        const alpha = (1 - edgeDistance / 132) * 0.105;
-        ctx.strokeStyle = `rgba(54,104,184,${alpha * 1.3})`;
-        ctx.lineWidth = 0.55;
-        ctx.beginPath();
-        ctx.moveTo(px, py);
-        ctx.lineTo(other.x, other.y);
-        ctx.stroke();
+    collectEdges();
+
+    ctx.lineWidth = 0.55;
+    for (let bucket = 0; bucket < EDGE_BUCKETS; bucket += 1) {
+      const segments = edgeBuckets[bucket];
+      if (!segments.length) continue;
+      ctx.strokeStyle = `rgba(54,104,184,${(((bucket + 0.5) / EDGE_BUCKETS) * EDGE_ALPHA).toFixed(4)})`;
+      ctx.beginPath();
+      for (let k = 0; k < segments.length; k += 4) {
+        ctx.moveTo(segments[k], segments[k + 1]);
+        ctx.lineTo(segments[k + 2], segments[k + 3]);
       }
+      ctx.stroke();
+    }
 
-      if (influence > 0.05) {
-        ctx.strokeStyle = `rgba(${color},${influence * 0.32})`;
-        ctx.lineWidth = 0.8;
+    if (pointer.active) {
+      ctx.lineWidth = 0.8;
+      for (let i = 0; i < nodes.length; i += 1) {
+        const node = nodes[i];
+        if (node.influence <= 0.05) continue;
+        ctx.strokeStyle = `rgba(${NODE_COLORS[node.family]},${node.influence * 0.32})`;
         ctx.beginPath();
-        ctx.moveTo(px, py);
+        ctx.moveTo(node.px, node.py);
         ctx.lineTo(pointer.x, pointer.y);
         ctx.stroke();
       }
+    }
 
-      ctx.fillStyle = `rgba(${color},${0.25 + pulse * 0.36})`;
+    for (let i = 0; i < nodes.length; i += 1) {
+      const node = nodes[i];
+      ctx.fillStyle = `rgba(${NODE_COLORS[node.family]},${0.25 + node.pulse * 0.36})`;
       ctx.beginPath();
-      ctx.arc(px, py, node.radius + influence * 1.5, 0, Math.PI * 2);
+      ctx.arc(node.px, node.py, node.radius + node.influence * 1.5, 0, Math.PI * 2);
       ctx.fill();
     }
 
